@@ -6,3 +6,15 @@ class socket{
     virtual void receive() = 0;
     virtual void shutdown() = 0;
 };
+class TCPSocket:socket{
+    virtual void connect() override;
+    virtual void send(const std::string& message) override;
+    virtual void receive() override;
+    virtual void shutdown() override;
+};
+class UDPSocket:socket{
+    virtual void connect() override;
+    virtual void send(const std::string& message) override;
+    virtual void receive() override;
+    virtual void shutdown() override;
+};
