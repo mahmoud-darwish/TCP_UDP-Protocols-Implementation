@@ -1,3 +1,5 @@
+#ifndef CHANNELSOCKET_HPP
+#define CHANNELSOCKET_HPP
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
@@ -35,3 +37,4 @@ class UDPSocket:public ChannelSocket{
     virtual void receive() override;
     virtual void shutdown() override;
 };
+#endif  

@@ -1,6 +1,9 @@
 #include <iostream>
 #include "ChannelSocket.hpp"
 #include "channel.hpp"
+string channel::get_recievedMessage(){
+    return channelSocket->get_recievedMessage();
+}
 //...............................................ServerChannel...........................................................
 
 void ServerChannel::start(){
@@ -90,6 +93,7 @@ ServerChannel::ServerChannel(bool isTCP,int port): channel( isTCP ,port) {
 void ClientChannel::start(){
     channelSocket->connect();
     if(isTCP){
+            channelSocket->set_messageSock(channelSocket->get_sock());
             address.sin_family = AF_INET;
             address.sin_port = htons(port);
             address.sin_addr.s_addr = inet_addr("address");

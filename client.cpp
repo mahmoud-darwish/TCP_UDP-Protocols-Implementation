@@ -1,8 +1,11 @@
 #include "channel.hpp"
 #include <iostream>
 int main(){
-ClientChannel client(1,1000);
+ClientChannel client(1,3500);
 client.start();
-client.send("hello from client");
+string message = "hello from client";
+client.send(message);
+client.receive();
+cout<< client.get_recievedMessage()<<endl;
 client.stop();
 }
