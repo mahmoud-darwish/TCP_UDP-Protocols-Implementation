@@ -10,20 +10,26 @@ class ChannelSocket{
         int sock;
         int messageSock;
         std::string recievedMessage;
-        struct sockaddr_in UDPdest;
     public:
+        struct sockaddr_in UDPdest;
+        int get_sock();
+        int get_messageSock();
+        void set_messageSock(int messageSock);
+        string get_recievedMessage();
         virtual void connect() = 0;
         virtual void send(const std::string& message) = 0;
         virtual void receive() = 0;
         virtual void shutdown() = 0;
+        virtual ~ChannelSocket() {}
+        
 };
-class TCPSocket:ChannelSocket{
+class TCPSocket:public ChannelSocket{
     virtual void connect() override;
     virtual void send(const std::string& message) override;
     virtual void receive() override;
     virtual void shutdown() override;
 };
-class UDPSocket:ChannelSocket{
+class UDPSocket:public ChannelSocket{
     virtual void connect() override;
     virtual void send(const std::string& message) override;
     virtual void receive() override;

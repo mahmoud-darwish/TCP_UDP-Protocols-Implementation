@@ -5,7 +5,21 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "ChannelSocket.hpp"
+//...............................................ChannelSocket...........................................................
+int ChannelSocket::get_messageSock(){
+    return messageSock;
+}
+int ChannelSocket::get_sock(){
+    return sock;
+}
+string ChannelSocket::get_recievedMessage(){
+    return recievedMessage;
+}
+void ChannelSocket::set_messageSock(int messageSock){
+    this->messageSock = messageSock;
+}
 
+//...............................................TCPSocket...........................................................
 void TCPSocket::connect(){
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         perror("Socket failed");
@@ -33,7 +47,7 @@ void TCPSocket::receive(){
     }
     
 }
-
+//...............................................UDPSocket...........................................................
 void UDPSocket::connect(){
     if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == 0) {
         perror("Socket failed");
