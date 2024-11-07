@@ -1,7 +1,8 @@
 #include "channel.hpp"
 #include <iostream>
 int main(){
-ServerChannel server(1,1000);
 ClientChannel client(1,1000);
-server.start();
+client.start();
+client.send("hello from client");
+client.stop();
 }
