@@ -41,38 +41,18 @@ void ServerChannel::start(){
             channelSocket->set_messageSock(messageSock);
     }
     else{
-            const char *multicastIP = "239.255.255.250";  // Multicast address
-            // Allow multiple sockets to use the same port
-            int reuse = 1;
-            if (setsockopt(channelSocket->get_sock(), SOL_SOCKET, SO_REUSEADDR, (char*)&reuse, sizeof(reuse)) < 0) {
-                perror("Setting SO_REUSEADDR error");
-                exit(EXIT_FAILURE);
-            }
-
-            // Bind to the local address
+            const char *multicastIP = "239.255.255.250"; 
             memset(&address, 0, sizeof(address));
             address.sin_family = AF_INET;
-            address.sin_port = htons(port);
-            address.sin_addr.s_addr = INADDR_ANY;
-            if (bind(channelSocket->get_sock(), (struct sockaddr*)&address, sizeof(address)) < 0) {
-                perror("Bind failed");
-                exit(EXIT_FAILURE);
-            }
-            // Join the multicast group
-            multicastRequest.imr_multiaddr.s_addr = inet_addr(multicastIP);
-            multicastRequest.imr_interface.s_addr = INADDR_ANY;
-            if (setsockopt(channelSocket->get_sock(), IPPROTO_IP, IP_ADD_MEMBERSHIP, (char*)&multicastRequest, sizeof(multicastRequest)) < 0) {
-                perror("Multicast join failed");
-                exit(EXIT_FAILURE);
-            }
+            address.sin_addr.s_addr = inet_addr(multicastIP);
+            address.sin_port = htons(port);  
+            channelSocket->UDPdest = address;     
     }
 }
 void ServerChannel::stop(){
     channelSocket->shutdown();
     if (isTCP)
         close(channelSocket->get_messageSock());
-    else
-        setsockopt(channelSocket->get_sock(), IPPROTO_IP, IP_DROP_MEMBERSHIP, (char*)&multicastRequest, sizeof(multicastRequest));
 }
 
 void ServerChannel::receive(){
@@ -109,17 +89,39 @@ void ClientChannel::start(){
             }
     }
     else{
-            const char *multicastIP = "239.255.255.250"; 
+const char *multicastIP = "239.255.255.250";  // Multicast address
+            // Allow multiple sockets to use the same port
+            int reuse = 1;
+            if (setsockopt(channelSocket->get_sock(), SOL_SOCKET, SO_REUSEADDR, (char*)&reuse, sizeof(reuse)) < 0) {
+                perror("Setting SO_REUSEADDR error");
+                exit(EXIT_FAILURE);
+            }
+
+            // Bind to the local address
             memset(&address, 0, sizeof(address));
             address.sin_family = AF_INET;
-            address.sin_addr.s_addr = inet_addr(multicastIP);
             address.sin_port = htons(port);
+            address.sin_addr.s_addr = INADDR_ANY;
+            if (bind(channelSocket->get_sock(), (struct sockaddr*)&address, sizeof(address)) < 0) {
+                perror("Bind failed");
+                exit(EXIT_FAILURE);
+            }
+            // Join the multicast group
+            multicastRequest.imr_multiaddr.s_addr = inet_addr(multicastIP);
+            multicastRequest.imr_interface.s_addr = INADDR_ANY;
+            if (setsockopt(channelSocket->get_sock(), IPPROTO_IP, IP_ADD_MEMBERSHIP, (char*)&multicastRequest, sizeof(multicastRequest)) < 0) {
+                perror("Multicast join failed");
+                exit(EXIT_FAILURE);
+            }
     }
         
 }
 
 void ClientChannel::stop(){
     channelSocket->shutdown();
+    if(!isTCP)
+        setsockopt(channelSocket->get_sock(), IPPROTO_IP, IP_DROP_MEMBERSHIP, (char*)&multicastRequest, sizeof(multicastRequest));
+
 }
 
 void ClientChannel::receive(){

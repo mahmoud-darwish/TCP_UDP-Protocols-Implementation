@@ -23,8 +23,7 @@ class channel{
     }
     };
 class ServerChannel:public channel{
-    private:
-        struct ip_mreq multicastRequest;
+
     public:
         ServerChannel(bool isTCP, int port);
         virtual void start() override;
@@ -33,6 +32,8 @@ class ServerChannel:public channel{
         virtual void receive() override;
 };
 class  ClientChannel:public channel{
+    private:
+        struct ip_mreq multicastRequest;
     public:
         ClientChannel(bool isTCP, int port);
         virtual void start() override;

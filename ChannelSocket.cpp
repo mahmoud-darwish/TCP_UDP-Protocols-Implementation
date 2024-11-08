@@ -66,12 +66,13 @@ void UDPSocket::send(const std::string& message){
 }
 void UDPSocket::receive(){
     std::string buffer(1024, '\0');  // Pre-allocate buffer space in the string
-    int len = recvfrom(sock, &buffer[0], buffer.size(), 0, 
-                       (struct sockaddr*)&UDPdest, (socklen_t *)sizeof(UDPdest));
+ //int len = recvfrom(sock, &buffer[0], buffer.size(), 0, (struct sockaddr*)&UDPdest, (socklen_t *)sizeof(UDPdest));
+    int len = recvfrom(sock, &buffer[0], buffer.size(), 0, NULL, 0);
     if (len > 0) {
         buffer.resize(len);  // Resize string to actual received data size
 
     }
+    recievedMessage = buffer;
     
 }
 
