@@ -57,6 +57,7 @@ void ServerChannel::stop(){
 
 void ServerChannel::receive(){
     channelSocket->receive();
+    //udp server recieving under development
 }
 
 void ServerChannel::send(const std::string& message){
@@ -130,6 +131,7 @@ void ClientChannel::receive(){
 
 void ClientChannel::send(const std::string& message){
     channelSocket->send(message);
+    //udp client sending under development
 }
 
 ClientChannel::ClientChannel(bool isTCP, int port): channel( isTCP ,port) {
