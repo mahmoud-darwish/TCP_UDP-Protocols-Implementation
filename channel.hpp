@@ -2,6 +2,8 @@
 #define CHANNEL_HPP
 #include <iostream>
 #include "ChannelSocket.hpp"
+#define TCP 1
+#define UDP 0
 using namespace std;
 class channel{
     protected:
